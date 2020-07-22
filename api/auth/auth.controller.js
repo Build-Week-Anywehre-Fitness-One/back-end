@@ -30,7 +30,13 @@ async function register(req, res) {
   try {
     password = await bcrypt.hash(password, 12);
     let user = await insert({ username, password, role });
-    res.status(201).json(user);
+    const token = generateToken(user);
+    res.status(201).json({
+      id: user.id,
+      username: user.username,
+      role: user.role,
+      token: token
+    });
   } catch (e) {
     res.status(500).json({ message: "Unable to register new user" });
   }
@@ -60,14 +66,12 @@ async function login(req, res) {
         .json({ message: "Invalid username and/or password" });
     }
     const token = generateToken(user);
-    res
-      .status(200)
-      .json({
-        id: user.id,
-        username: user.username,
-        role: user.role,
-        token: token
-      });
+    res.status(200).json({
+      id: user.id,
+      username: user.username,
+      role: user.role,
+      token: token
+    });
   } catch (e) {
     res.status(500).json({ message: "Unable to login User" });
   }
