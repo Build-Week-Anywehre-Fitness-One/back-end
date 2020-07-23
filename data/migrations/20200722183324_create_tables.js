@@ -14,7 +14,7 @@ exports.up = function(knex) {
       tbl.string("name", 255).notNullable();
       tbl.string("type", 255).notNullable();
       tbl.string("startTime", 255).notNullable(); // format time HH:MM
-      tbl.string("date", 255); // format date YYYY-MM-DD
+      tbl.string("date", 255).notNullable(); // format date YYYY-MM-DD
       tbl.integer("duration", 255).notNullable(); // minutes
       tbl.string("intensity").notNullable(); // low, medium, high
       tbl.string("location", 255).notNullable(); // an address
