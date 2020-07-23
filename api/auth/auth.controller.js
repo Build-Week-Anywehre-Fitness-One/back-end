@@ -38,7 +38,7 @@ async function register(req, res) {
       token: token
     });
   } catch (e) {
-    res.status(500).json({ message: "Unable to register new user" });
+    res.status(500).json({ message: "Unable to register new user", error: e });
   }
 }
 
