@@ -1,29 +1,41 @@
 const db = require("../../data/dbConfig");
 
+// set like operator
+// ilike for postgres in production to make search case insensitive
+const LIKE_OPERATOR = process.env.NODE_ENV === "production" ? "ilike" : "like";
+
 function findBy(filter) {
   let query = db("classes");
   if (filter.date) {
-    query = query.where("date", "like", `%${filter.date}%`);
+    query = query.where("date", `${LIKE_OPERATOR}`, `%${filter.date}%`);
   }
 
   if (filter.location) {
-    query = query.where("location", "like", `%${filter.location}%`);
+    query = query.where("location", `${LIKE_OPERATOR}`, `%${filter.location}%`);
   }
 
   if (filter.type) {
-    query = query.where("type", "like", `%${filter.type}%`);
+    query = query.where("type", `${LIKE_OPERATOR}`, `%${filter.type}%`);
   }
 
   if (filter.startTime) {
-    query = query.where("startTime", "like", `%${filter.startTime}%`);
+    query = query.where(
+      "startTime",
+      `${LIKE_OPERATOR}`,
+      `%${filter.startTime}%`
+    );
   }
 
   if (filter.intensity) {
-    query = query.where("intensity", "like", `%${filter.intensity}%`);
+    query = query.where(
+      "intensity",
+      `${LIKE_OPERATOR}`,
+      `%${filter.intensity}%`
+    );
   }
 
   if (filter.duration) {
-    query = query.where("duration", "like", `%${filter.duration}%`);
+    query = query.where("duration", filter.duration);
   }
 
   return query.select();
