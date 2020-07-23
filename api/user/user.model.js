@@ -18,6 +18,7 @@ function findById(id) {
 function insert(user) {
   return db("users")
     .insert(user)
+    .returning("id")
     .then(ids => {
       return findById(ids[0]);
     });
