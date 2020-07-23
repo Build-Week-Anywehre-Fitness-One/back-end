@@ -51,7 +51,7 @@ async function searchClass(req, res) {
   }
 
   if (duration) {
-    finalquery.duration = duration;
+    finalquery.duration = +duration;
   }
 
   if (type) {
