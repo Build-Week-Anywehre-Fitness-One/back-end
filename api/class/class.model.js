@@ -37,7 +37,9 @@ function findById(id) {
 
 async function insert(classes, user_id) {
   try {
-    const [class_id] = await db("classes").insert(classes);
+    const [class_id] = await db("classes")
+      .insert(classes)
+      .returning("id");
     const newClass = await findById(class_id);
 
     // make sure to establish many to many relationship with users <-> classes
