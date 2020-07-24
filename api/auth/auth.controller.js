@@ -11,6 +11,13 @@ async function register(req, res) {
       .json({ message: "username, password and role is required" });
   }
 
+  // check to see that allowed roles are selected
+  if (role != "client" && role != "instructor") {
+    return res
+      .status(400)
+      .json({ message: "role must either be client or instructor" });
+  }
+
   // handle case for instructor role
   if (role === "instructor") {
     if (!auth_code) {
