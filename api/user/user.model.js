@@ -24,4 +24,8 @@ function insert(user) {
     });
 }
 
-module.exports = { find, findBy, findById, insert };
+function joinClass(user_id, class_id) {
+  return db("users_classes").insert({ user_id, class_id });
+}
+
+module.exports = { find, findBy, findById, insert, joinClass };

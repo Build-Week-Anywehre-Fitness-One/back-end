@@ -18,7 +18,10 @@ exports.up = function(knex) {
       tbl.integer("duration", 255).notNullable(); // minutes
       tbl.string("intensity").notNullable(); // low, medium, high
       tbl.string("location", 255).notNullable(); // an address
-      tbl.integer("numberOfRegisteredAttendees").notNullable();
+      tbl
+        .integer("numberOfRegisteredAttendees")
+        .defaultTo(0)
+        .notNullable();
       tbl.integer("maxClassSize").notNullable();
     })
     .createTable("users_classes", tbl => {
