@@ -89,4 +89,24 @@ async function userLeaveClass(req, res) {
   }
 }
 
-module.exports = { getAllUsers, userJoinClass, userLeaveClass };
+async function getUserClasses(req, res) {
+  const { user_id } = req.params;
+  if (!user_id) {
+    return res.status(400).json({ message: "missing params user_id" });
+  }
+  try {
+    const user = await User.findById(user_id);
+
+    if (!user) {
+      return res.status(400).json({ message: "user does not exist" });
+    }
+
+    // use decodedToken.subject to make sure getting right user id from token
+    const userClasses = await User.findUserClasses(req.decodedToken.subject);
+    res.status(200).json(userClasses);
+  } catch (e) {
+    res.status(500).json({ message: "uable to get user classes" });
+  }
+}
+
+module.exports = { getAllUsers, userJoinClass, userLeaveClass, getUserClasses };

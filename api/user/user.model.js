@@ -34,4 +34,19 @@ function removeFromClass(user_id, class_id) {
     .del();
 }
 
-module.exports = { find, findBy, findById, insert, joinClass, removeFromClass };
+function findUserClasses(id) {
+  return db("users_classes")
+    .select("classes.*")
+    .join("classes", "users_classes.class_id", "=", "classes.id")
+    .where("users_classes.user_id", id);
+}
+
+module.exports = {
+  find,
+  findBy,
+  findById,
+  insert,
+  joinClass,
+  removeFromClass,
+  findUserClasses
+};
