@@ -28,4 +28,25 @@ function joinClass(user_id, class_id) {
   return db("users_classes").insert({ user_id, class_id });
 }
 
-module.exports = { find, findBy, findById, insert, joinClass };
+function removeFromClass(user_id, class_id) {
+  return db("users_classes")
+    .where({ user_id, class_id })
+    .del();
+}
+
+function findUserClasses(id) {
+  return db("users_classes")
+    .select("classes.*")
+    .join("classes", "users_classes.class_id", "=", "classes.id")
+    .where("users_classes.user_id", id);
+}
+
+module.exports = {
+  find,
+  findBy,
+  findById,
+  insert,
+  joinClass,
+  removeFromClass,
+  findUserClasses
+};

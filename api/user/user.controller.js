@@ -56,4 +56,57 @@ async function userJoinClass(req, res) {
   }
 }
 
-module.exports = { getAllUsers, userJoinClass };
+async function userLeaveClass(req, res) {
+  const { user_id, class_id } = req.params;
+  if (!user_id || !class_id) {
+    return res
+      .status(400)
+      .json({ message: "missing params user_id and/or class_id" });
+  }
+  try {
+    const [user, classes] = await Promise.all([
+      User.findById(user_id),
+      Classes.findById(class_id)
+    ]);
+
+    if (!user) {
+      return res.status(400).json({ message: "user does not exist" });
+    }
+
+    if (!classes) {
+      return res.status(400).json({ message: "class does not exist" });
+    }
+
+    await User.removeFromClass(user_id, class_id);
+
+    await Classes.update(class_id, {
+      numberOfRegisteredAttendees: classes.numberOfRegisteredAttendees - 1
+    });
+
+    res.status(200).json({ message: "user removed from class" });
+  } catch (e) {
+    res.status(500).json({ message: "uable to remove from class" });
+  }
+}
+
+async function getUserClasses(req, res) {
+  const { user_id } = req.params;
+  if (!user_id) {
+    return res.status(400).json({ message: "missing params user_id" });
+  }
+  try {
+    const user = await User.findById(user_id);
+
+    if (!user) {
+      return res.status(400).json({ message: "user does not exist" });
+    }
+
+    // use decodedToken.subject to make sure getting right user id from token
+    const userClasses = await User.findUserClasses(req.decodedToken.subject);
+    res.status(200).json(userClasses);
+  } catch (e) {
+    res.status(500).json({ message: "uable to get user classes" });
+  }
+}
+
+module.exports = { getAllUsers, userJoinClass, userLeaveClass, getUserClasses };
